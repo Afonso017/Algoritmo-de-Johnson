@@ -1,84 +1,67 @@
-from bellman_ford_aux import bellman_ford
-from dijkstra_aux import dijkstra
+from collections import defaultdict
+INT_MAX = float('Inf')
 
-class Graph:
-    def __init__(self):
-        self.vertices = []
-        self.edges = []
+def Min_Distance(dist, visit):
+    (minimum, Minimum_Vertex) = (INT_MAX, 0)
+    for vertex in range(len(dist)):
+        if minimum > dist[vertex] and not visit[vertex]:
+            (minimum, Minimum_Vertex) = (dist[vertex], vertex)
+    return Minimum_Vertex
 
-    def add_vertex(self, vertex):
-        self.vertices.append(vertex)
+def Dijkstra_Algorithm(graph, Altered_Graph, source, output_file):
+    tot_vertices = len(graph)
+    sptSet = defaultdict(lambda: False)
+    dist = [INT_MAX] * tot_vertices
+    dist[source] = 0
 
-    def add_edge(self, u, v, weight):
-        self.edges.append((u, v, weight))
+    for _ in range(tot_vertices):
+        curVertex = Min_Distance(dist, sptSet)
+        sptSet[curVertex] = True
+        for vertex in range(tot_vertices):
+            if (not sptSet[vertex] and
+                dist[vertex] > (dist[curVertex] + Altered_Graph[curVertex][vertex]) and
+                graph[curVertex][vertex] != 0):
+                dist[vertex] = dist[curVertex] + Altered_Graph[curVertex][vertex]
 
-def johnson_algorithm(graph: Graph):
-    if not graph.edges:
-        return {}
+def BellmanFord_Algorithm(edges, graph, tot_vertices):
+    dist = [INT_MAX] * (tot_vertices + 1)
+    dist[tot_vertices] = 0
+    for i in range(tot_vertices):
+        edges.append([tot_vertices, i, 0])
+    for _ in range(tot_vertices):
+        for source, destn, weight in edges:
+            if dist[source] != INT_MAX and dist[source] + weight < dist[destn]:
+                dist[destn] = dist[source] + weight
+    return dist[:tot_vertices]
 
-    vertex_to_index = {v: i for i, v in enumerate(graph.vertices)}
-    index_to_vertex = {i: v for v, i in vertex_to_index.items()}
-    V = len(graph.vertices)
-
+def JohnsonAlgorithm(graph, output_file):
     edges = []
-    for u, v, weight in graph.edges:
-        edges.append((vertex_to_index[u], vertex_to_index[v], weight))
+    for i in range(len(graph)):
+        for j in range(len(graph[i])):
+            if graph[i][j] != 0:
+                edges.append([i, j, graph[i][j]])
+    Alter_weights = BellmanFord_Algorithm(edges, graph, len(graph))
+    Altered_Graph = [[INT_MAX] * len(graph) for _ in range(len(graph))]
+    for i in range(len(graph)):
+        for j in range(len(graph[i])):
+            if graph[i][j] != 0:
+                Altered_Graph[i][j] = graph[i][j] + Alter_weights[i] - Alter_weights[j]
+    
+    with open(output_file, 'w') as f:
+        f.write('Modified Graph:\n')
+        for row in Altered_Graph:
+            f.write(" ".join("INF" if val == INT_MAX else str(val) for val in row) + "\n")
+        f.write("\n")
+    
+    for source in range(len(graph)):
+        Dijkstra_Algorithm(graph, Altered_Graph, source, output_file)
 
-    # Passo 1: Adicionar um novo vértice q
-    q = V
-    new_edges = edges.copy()
-    for v in range(V):
-        new_edges.append((q, v, 0))
+def read_graph_from_file(input_file):
+    with open(input_file, 'r') as f:
+        return [list(map(int, line.split())) for line in f.readlines()]
 
-    # Passo 2: Executar o algoritmo de Bellman-Ford
-    h = bellman_ford(new_edges, q, V + 1)
-    if h == [-1]:
-        return "O grafo contém um ciclo de peso negativo"
+input_file = 'input.txt'
+output_file = 'output.txt'
 
-    # Passo 3: Recalcular os pesos das arestas
-    reweighted_edges = []
-    for u, v, weight in edges:
-        reweighted_edges.append((u, v, weight + h[u] - h[v]))
-
-    # Passo 4: Executar o algoritmo de Dijkstra para cada vértice
-    distances = {}
-    for u in range(V):
-        dist = dijkstra(reweighted_edges, u, V)
-        # Passo 5: Ajustar as distâncias
-        adjusted_dist = {index_to_vertex[v]: dist[v] - h[u] + h[v] for v in range(V)}
-        distances[index_to_vertex[u]] = adjusted_dist
-
-    return distances
-
-def read_graph_from_file(filename: str) -> Graph:
-    graph = Graph()
-    with open(filename, 'r') as file:
-        # Ler os vértices da primeira linha
-        vertices = file.readline().strip().split(',')
-        for vertex in vertices:
-            graph.add_vertex(vertex)
-
-        # Ler as arestas das linhas seguintes
-        for line in file:
-            u, v, weight = line.strip().split(',')
-            graph.add_edge(u, v, int(weight))
-    return graph
-
-def write_output_to_file(filename: str, result):
-    with open(filename, 'w') as file:
-        for u in result:
-            file.write(f"{u}: {result[u]}\n")
-
-if __name__ == "__main__":
-    # Ler o grafo do arquivo de entrada
-    input_filename = "input.txt"
-    graph = read_graph_from_file(input_filename)
-
-    # Executar o algoritmo de Johnson
-    result = johnson_algorithm(graph)
-
-    # Escrever a saída no arquivo de saída
-    output_filename = "output.txt"
-    write_output_to_file(output_filename, result)
-
-    print(f"Resultado escrito em {output_filename}")
+graph = read_graph_from_file(input_file)
+JohnsonAlgorithm(graph, output_file)
