@@ -1,24 +1,27 @@
-from typing import List, Tuple
-import heapq
+from collections import defaultdict
+INT_MAX = float('Inf')
 
-def dijkstra(edges: List[Tuple[int, int, int]], src: int, V: int) -> List[int]:
-    dist = [float('inf')] * V
-    dist[src] = 0
-    priority_queue = [(0, src)]
+def Min_Distance(dist, visit):
+    (minimum, Minimum_Vertex) = (INT_MAX, 0)
+    for vertex in range(len(dist)):
+        if minimum > dist[vertex] and not visit[vertex]:
+            (minimum, Minimum_Vertex) = (dist[vertex], vertex)
+    return Minimum_Vertex
 
-    while priority_queue:
-        current_distance, u = heapq.heappop(priority_queue)
+def Dijkstra_Algorithm(graph, Altered_Graph, source, output_file, shortest_paths):
+    tot_vertices = len(graph)
+    sptSet = defaultdict(lambda: False)  # Conjunto de vértices incluídos no caminho mais curto
+    dist = [INT_MAX] * tot_vertices  # Inicializa todas as distâncias como infinito
+    dist[source] = 0  # A distância da fonte para ela mesma é 0
 
-        # Se já encontramos um caminho melhor, ignoramos
-        if current_distance > dist[u]:
-            continue
-
-        # Relaxamento das arestas
-        for u2, v, weight in edges:
-            if u2 == u:
-                distance = current_distance + weight
-                if distance < dist[v]:
-                    dist[v] = distance
-                    heapq.heappush(priority_queue, (distance, v))
-
-    return dist
+    for _ in range(tot_vertices):
+        curVertex = Min_Distance(dist, sptSet)  # Encontra o vértice com menor distância
+        sptSet[curVertex] = True  # Marca o vértice como visitado
+        for vertex in range(tot_vertices):
+            if (not sptSet[vertex] and  # Se ainda não foi visitado
+                Altered_Graph[curVertex][vertex] != INT_MAX and  # Se há um caminho válido
+                dist[curVertex] != INT_MAX and  # Se a distância não é infinita
+                dist[vertex] > (dist[curVertex] + Altered_Graph[curVertex][vertex])):  # Se encontrou um caminho menor
+                dist[vertex] = dist[curVertex] + Altered_Graph[curVertex][vertex]
+    
+    shortest_paths.append(dist)  # Adiciona o vetor de distâncias à matriz de caminhos mais curtos

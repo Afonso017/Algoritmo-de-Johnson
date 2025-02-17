@@ -1,27 +1,11 @@
-from typing import List, Tuple
-
-# Função Bellman-Ford fornecida por você
-def bellman_ford(edges: List[Tuple[int, int, int]], src: int, V: int) -> List[int]:
-    inf = float('inf')
-    if not edges:
-        return []
-
-    dist = [inf] * V
-    dist[src] = 0
-
-    # Relaxamento das arestas
-    for _ in range(V - 1):
-        updated = False
-        for u, v, weight in edges:
-            if dist[u] != inf and dist[u] + weight < dist[v]:
-                dist[v] = dist[u] + weight
-                updated = True
-        if not updated:
-            break
-
-    # Verifica se tem ciclo negativo
-    for u, v, weight in edges:
-        if dist[u] != inf and dist[u] + weight < dist[v]:
-            return [-1]
-
-    return dist
+INT_MAX = float('Inf')
+def BellmanFord_Algorithm(edges, graph, tot_vertices):
+    dist = [INT_MAX] * (tot_vertices + 1)
+    dist[tot_vertices] = 0  # Define a distância da fonte fictícia como 0
+    for i in range(tot_vertices):
+        edges.append([tot_vertices, i, 0])  # Adiciona arestas fictícias com peso 0
+    for _ in range(tot_vertices + 1):  # Executa o algoritmo para detectar possíveis ciclos negativos
+        for source, destn, weight in edges:
+            if dist[source] != INT_MAX and dist[source] + weight < dist[destn]:
+                dist[destn] = dist[source] + weight
+    return dist[:tot_vertices]  # Retorna os pesos alterados para os vértices originais
