@@ -1,0 +1,72 @@
+digraph G {
+"Araçatuba" -> "Pres. Venceslau" [label="150"];
+"Araçatuba" -> "Pres. Prudente" [label="inf"];
+"Araçatuba" -> "Tupã" [label="90"];
+"Araçatuba" -> "Marília" [label="110"];
+"Araçatuba" -> "Assis" [label="inf"];
+"Araçatuba" -> "Bauru" [label="160"];
+"Araçatuba" -> "Ourinhos
+" [label="inf"];
+"Pres. Venceslau" -> "Araçatuba" [label="150"];
+"Pres. Venceslau" -> "Pres. Prudente" [label="40"];
+"Pres. Venceslau" -> "Tupã" [label="95"];
+"Pres. Venceslau" -> "Marília" [label="inf"];
+"Pres. Venceslau" -> "Assis" [label="inf"];
+"Pres. Venceslau" -> "Bauru" [label="inf"];
+"Pres. Venceslau" -> "Ourinhos
+" [label="inf"];
+"Pres. Prudente" -> "Araçatuba" [label="inf"];
+"Pres. Prudente" -> "Pres. Venceslau" [label="40"];
+"Pres. Prudente" -> "Tupã" [label="85"];
+"Pres. Prudente" -> "Marília" [label="inf"];
+"Pres. Prudente" -> "Assis" [label="105"];
+"Pres. Prudente" -> "Bauru" [label="inf"];
+"Pres. Prudente" -> "Ourinhos
+" [label="inf"];
+"Tupã" -> "Araçatuba" [label="90"];
+"Tupã" -> "Pres. Venceslau" [label="95"];
+"Tupã" -> "Pres. Prudente" [label="85"];
+"Tupã" -> "Marília" [label="60"];
+"Tupã" -> "Assis" [label="80"];
+"Tupã" -> "Bauru" [label="inf"];
+"Tupã" -> "Ourinhos
+" [label="inf"];
+"Marília" -> "Araçatuba" [label="110"];
+"Marília" -> "Pres. Venceslau" [label="inf"];
+"Marília" -> "Pres. Prudente" [label="inf"];
+"Marília" -> "Tupã" [label="60"];
+"Marília" -> "Assis" [label="85"];
+"Marília" -> "Bauru" [label="65"];
+"Marília" -> "Ourinhos
+" [label="80"];
+"Assis" -> "Araçatuba" [label="inf"];
+"Assis" -> "Pres. Venceslau" [label="inf"];
+"Assis" -> "Pres. Prudente" [label="105"];
+"Assis" -> "Tupã" [label="80"];
+"Assis" -> "Marília" [label="85"];
+"Assis" -> "Bauru" [label="inf"];
+"Assis" -> "Ourinhos
+" [label="75"];
+"Bauru" -> "Araçatuba" [label="160"];
+"Bauru" -> "Pres. Venceslau" [label="inf"];
+"Bauru" -> "Pres. Prudente" [label="inf"];
+"Bauru" -> "Tupã" [label="inf"];
+"Bauru" -> "Marília" [label="65"];
+"Bauru" -> "Assis" [label="inf"];
+"Bauru" -> "Ourinhos
+" [label="105"];
+"Ourinhos
+" -> "Araçatuba" [label="inf"];
+"Ourinhos
+" -> "Pres. Venceslau" [label="inf"];
+"Ourinhos
+" -> "Pres. Prudente" [label="inf"];
+"Ourinhos
+" -> "Tupã" [label="inf"];
+"Ourinhos
+" -> "Marília" [label="80"];
+"Ourinhos
+" -> "Assis" [label="75"];
+"Ourinhos
+" -> "Bauru" [label="105"];
+}

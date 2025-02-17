@@ -30,7 +30,7 @@ def JohnsonAlgorithm(graph, output_file):
         Dijkstra_Algorithm(graph, Altered_Graph, source, output_file, shortest_paths)  # Executa Dijkstra para cada fonte
     
     with open(output_file, 'w') as f:
-        #f.write('Matrix Final:\n')
+        f.write('Matrix Final:\n')
         for row in shortest_paths:
             f.write(" ".join("INF" if val == INT_MAX else str(val) for val in row) + "\n")
 
@@ -43,6 +43,7 @@ def read_graph_from_file(input_file):
 
 input_file = input("Digite o nome do arquivo de entrada: ")
 output_file = 'output.txt'
+graphviz_file = 'graphviz.txt'
 
 nomes, graph = read_graph_from_file(input_file)
 graph = JohnsonAlgorithm(graph, output_file)
@@ -51,9 +52,12 @@ if graph is None:
     exit()
 
 # Gera o código para o graphviz
-print("digraph G {")
-for i in range(len(graph)):
-    for j in range(len(graph[i])):
-        if graph[i][j] != float('Inf'):
-            print(f'    \"{nomes[i]}\" -> \"{nomes[j]}\" [label="{graph[i][j]}"];')
-print("}")
+with open(graphviz_file, 'w', encoding='utf-8') as f:
+    f.write('digraph G {\n')
+    for i in range(len(graph)):
+        for j in range(len(graph[i])):
+            if graph[i][j] != 0:
+                f.write(f'"{nomes[i]}" -> "{nomes[j]}" [label="{graph[i][j]}"];\n')
+    f.write('}')
+
+print("Saída gravada em graphviz.txt e output.txt\n")
