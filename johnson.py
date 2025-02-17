@@ -37,13 +37,14 @@ def JohnsonAlgorithm(graph, output_file):
     return Altered_Graph
 
 def read_graph_from_file(input_file):
-    with open(input_file, 'r') as f:
-        return [list(map(int, line.split())) for line in f.readlines()]
+    with open(input_file, 'r', encoding='utf-8') as f:
+        nomes = f.readline().split(', ')
+        return nomes, [list(map(int, line.split())) for line in f.readlines()]
 
-input_file = 'input.txt'
+input_file = input("Digite o nome do arquivo de entrada: ")
 output_file = 'output.txt'
 
-graph = read_graph_from_file(input_file)
+nomes, graph = read_graph_from_file(input_file)
 graph = JohnsonAlgorithm(graph, output_file)
 
 if graph is None:
@@ -54,7 +55,5 @@ print("digraph G {")
 for i in range(len(graph)):
     for j in range(len(graph[i])):
         if graph[i][j] != float('Inf'):
-            node_i = chr(ord('A') + i)
-            node_j = chr(ord('A') + j)
-            print(f'    {node_i} -> {node_j} [label="{graph[i][j]}"];')
+            print(f'    \"{nomes[i]}\" -> \"{nomes[j]}\" [label="{graph[i][j]}"];')
 print("}")
