@@ -26,9 +26,11 @@ def JohnsonAlgorithm(graph, output_file):
         Dijkstra_Algorithm(graph, Altered_Graph, source, output_file, shortest_paths)  # Executa Dijkstra para cada fonte
     
     with open(output_file, 'w') as f:
-        f.write('Matrix Final:\n')
+        #f.write('Matrix Final:\n')
         for row in shortest_paths:
             f.write(" ".join("INF" if val == INT_MAX else str(val) for val in row) + "\n")
+
+    return Altered_Graph
 
 def read_graph_from_file(input_file):
     with open(input_file, 'r') as f:
@@ -38,4 +40,14 @@ input_file = 'input.txt'
 output_file = 'output.txt'
 
 graph = read_graph_from_file(input_file)
-JohnsonAlgorithm(graph, output_file)
+graph = JohnsonAlgorithm(graph, output_file)
+
+# Gera o código para o graphviz
+print("digraph G {")
+for i in range(len(graph)):
+    for j in range(len(graph[i])):
+        if graph[i][j] != float('Inf'):
+            node_i = chr(ord('A') + i)
+            node_j = chr(ord('A') + j)
+            print(f'    {node_i} -> {node_j} [label="{graph[i][j]}"];')
+print("}")
