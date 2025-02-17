@@ -11,6 +11,10 @@ def JohnsonAlgorithm(graph, output_file):
                 edges.append([i, j, graph[i][j]])  # Constrói a lista de arestas do grafo
     
     Alter_weights = BellmanFord_Algorithm(edges, graph, len(graph))  # Obtém os pesos alterados
+
+    if Alter_weights == [-1]:
+        print('O grafo tem ciclo negativo\n')
+        return
     
     # Inicializa a matriz alterada com valores infinitos
     Altered_Graph = [[INT_MAX] * len(graph) for _ in range(len(graph))]
@@ -41,6 +45,9 @@ output_file = 'output.txt'
 
 graph = read_graph_from_file(input_file)
 graph = JohnsonAlgorithm(graph, output_file)
+
+if graph is None:
+    exit()
 
 # Gera o código para o graphviz
 print("digraph G {")

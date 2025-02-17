@@ -8,4 +8,9 @@ def BellmanFord_Algorithm(edges, graph, tot_vertices):
         for source, destn, weight in edges:
             if dist[source] != INT_MAX and dist[source] + weight < dist[destn]:
                 dist[destn] = dist[source] + weight
+
+    for source, destn, weight in edges:
+            if dist[source] != INT_MAX and dist[source] + weight < dist[destn]:
+                return [-1]
+            
     return dist[:tot_vertices]  # Retorna os pesos alterados para os vértices originais
